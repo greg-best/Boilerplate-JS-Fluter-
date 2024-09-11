@@ -1,19 +1,32 @@
 
 
+import 'package:boilerplate/core/constants/url_constant.dart';
 import 'package:dio/dio.dart';
 
 
-abstract class HomeLocalDataSource {
+abstract class LoginRemoteDataSource {
 
-  //example: 
+  //example:
   // Future<Map<String,dynamic>> getCompany();
 }
 
-class HomeLocalDataSourceImpl implements HomeLocalDataSource {
+class LoginRemoteDataSourceImpl implements LoginRemoteDataSource {
   final Dio dio;
-  HomeLocalDataSourceImpl({
+  LoginRemoteDataSourceImpl({
     required this.dio,
   });
+
+  Future<List<Map<String,dynamic>>> getTests() async {
+    final String path = UrlConstant.baseUrl;
+    final Response<dynamic> response = await dio.get(path, options: Options());
+    if (response.statusCode.toString().startsWith('2')) {
+      return response.data;
+    } else {
+      throw DioException(
+        requestOptions: RequestOptions(path: path),
+      );
+    }
+  }
 
 
   /// example repository

@@ -1,38 +1,44 @@
-
-
+import 'package:boilerplate/common/models/auth/login_response.dart';
+import 'package:boilerplate/config/url_config.dart';
+import 'package:boilerplate/core/constants/url_constant.dart';
 import 'package:dio/dio.dart';
 
-
 abstract class HomeRemoteDataSource {
-
-  //example: 
-  // Future<Map<String,dynamic>> getCompany();
+  Future<LoginResponse> loginEmailSocmed(String email);
 }
 
 class HomeRemoteDataSourceImpl implements HomeRemoteDataSource {
   final Dio dio;
+
   HomeRemoteDataSourceImpl({
     required this.dio,
   });
 
+  final baseUrl = UrlConstant.baseUrl;
 
-  /// example repository
-
-  // final baseUrl = FlavorConfig.instance!.values!.baseUrlEndpoint;
-  // @override
-  // Future<Map<String,dynamic>> {isinamafunction}() async {
-  //   final String path = '$baseUrl/v1/company';
-  //   final Map<String,dynamic> response = await dio.get(path,
-  //       options: Options(headers: {
-  //         BaseUrlConfig.requiredToken: true,
-  //       }));
-  //   if (response.statusCode == 200) {
-  //     // return CompanyResponse.fromJson(response.data);
-  //     return response.data;
-  //   } else {
-  //     throw DioError(
-  //       requestOptions: RequestOptions(path: path),
-  //     );
-  //   }
-  // }
+  @override
+  Future<LoginResponse> loginEmailSocmed(String email) async {
+    final String path = '$baseUrl/example';
+    final Response<dynamic> response = await dio.post(
+      path,
+      options: Options(
+        contentType: Headers.jsonContentType,
+        extra: {
+          BaseUrlConfig.requireLocation: true,
+          BaseUrlConfig.requireNotifToken: true,
+          BaseUrlConfig.requireDeviceId: true,
+        },
+      ),
+      data: <String, dynamic>{
+        'email': email,
+      },
+    );
+    if (response.statusCode.toString().startsWith('2')) {
+      return LoginResponse.fromJson(response.data);
+    } else {
+      throw DioException(
+        requestOptions: RequestOptions(path: path),
+      );
+    }
+  }
 }

@@ -1,4 +1,6 @@
+import 'package:boilerplate/module/home/presentation/bloc/home_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 class Home extends StatefulWidget {
@@ -26,16 +28,16 @@ class _HomeState extends State<Home> {
   // final GlobalKey _bottomSheetKey = GlobalKey();
 
   @override
-  void initState() {
+  initState() {
     super.initState();
   }
 
   @override
-  void dispose() {
+  dispose() {
     super.dispose();
   }
 
-  void onRefresh() async {}
+  onRefresh() async {}
 
   @override
   Widget build(BuildContext context) {
@@ -52,20 +54,66 @@ class _HomeState extends State<Home> {
                 context.pop();
               });
             },
-            icon: Icon(
+            icon: const Icon(
               Icons.navigate_before,
             ),
           ),
-          title: Text('Home'),
+          title: const Text('Home'),
           centerTitle: false,
           surfaceTintColor: Colors.white,
           backgroundColor: Colors.white,
         ),
-        body: const SingleChildScrollView(
-          physics: const NeverScrollableScrollPhysics(),
-          child: Column(
-            children: [],
-          ),
+        body: BlocConsumer<HomeBloc, HomeState>(
+          listener: (context, state) {
+            if (state is HomeUsernameSuccess) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text('Username: ${state.username}'),
+                ),
+              );
+            }
+            if (state is HomePasswordSuccess) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text('Password: ${state.password}'),
+                ),
+              );
+            }
+          },
+          builder: (context, state) {
+            return Container(
+              padding: const EdgeInsets.all(16),
+              height: MediaQuery.of(context).size.height,
+              width: MediaQuery.of(context).size.width,
+              child: SingleChildScrollView(
+                physics: const NeverScrollableScrollPhysics(),
+                child: Column(
+                  children: [
+                    ElevatedButton(
+                      onPressed: () {
+                        context.read<HomeBloc>().add(HomeCheckUsernamePressed());
+                      },
+                      child: const Text('Cek Username'),
+                    ),
+                    const SizedBox(height: 8),
+                    ElevatedButton(
+                      onPressed: () {
+                        context.read<HomeBloc>().add(HomeCheckPasswordPressed());
+                      },
+                      child: const Text('Cek Password'),
+                    ),
+                    const SizedBox(height: 8),
+                    ElevatedButton(
+                      onPressed: () {
+                        context.read<HomeBloc>().add(AuthenticationLoginWithGooglePressed());
+                      },
+                      child: Text('Get Data'),
+                    )
+                  ],
+                ),
+              ),
+            );
+          },
         ),
       ),
     );
