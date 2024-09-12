@@ -41,7 +41,6 @@ dependencies:
   flutter_bloc: ^8.1.6
   equatable: ^2.0.5
   flutter_secure_storage: ^9.2.2
-  json_annotation: ^4.9.0
   dartz: ^0.10.1
   connectivity_plus: ^6.0.5
   google_sign_in: ^6.2.1
@@ -61,6 +60,8 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^4.0.0
+  flutter_flavorizr: ^2.2.3
+  json_annotation: ^4.9.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -103,3 +104,27 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package
+
+flavorizr:
+  generateDummyAssets: false
+  app:
+    android:
+      flavorDimensions: "flavor-type"
+    ios:
+
+  flavors:
+    development:
+      app:
+        name: "Dev-example.app"
+      android:
+        applicationId: "com.example.appdev"
+      ios:
+        bundleId: "com.example.appdev"
+
+    production:
+      app:
+        name: "example.app"
+      android:
+        applicationId: "com.example.app"
+      ios:
+        bundleId: "com.example.app"

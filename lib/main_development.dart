@@ -45,6 +45,7 @@ main() async {
 
 class App extends StatelessWidget {
   Alice alice = Alice(showNotification: true);
+
   App({super.key});
 
   @override
